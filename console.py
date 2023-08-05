@@ -11,6 +11,12 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+classes = {
+               'BaseModel': BaseModel, 'User': User, 'Place': Place,
+               'State': State, 'City': City, 'Amenity': Amenity,
+               'Review': Review
+              }
+
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
@@ -18,11 +24,6 @@ class HBNBCommand(cmd.Cmd):
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
-    classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
-              }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
              'number_rooms': int, 'number_bathrooms': int,
@@ -115,16 +116,28 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
+        try:
+            args = args.split(" ")
+            objects = eval("{}()".format(args[0]))
+            for i in range(1, len(args)):
+                if args[i] == "":
+                    continue
+                if "=" in args[i]:
+                    key, value = args[i].split("=")
+                    if value[0] == '"' and value[-1] == '"':
+                        value = value[1:-1]
+                    elif "." in value:
+                        value = float(value)
+                    else:
+                        value = int(value)
+                    setattr(objects, key, value)
+            objects.save()
+            print("{}".format(objects.id))
+
+        except AttributeError:
             print("** class name missing **")
-            return
-        elif args not in HBNBCommand.classes:
+        except NameError:
             print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -145,7 +158,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        if c_name not in HBNBCommand.classes:
+        if c_name not in classes:
             print("** class doesn't exist **")
             return
 
@@ -176,7 +189,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        if c_name not in HBNBCommand.classes:
+        if c_name not in classes:
             print("** class doesn't exist **")
             return
 
@@ -203,7 +216,7 @@ class HBNBCommand(cmd.Cmd):
 
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
+            if args not in classes:
                 print("** class doesn't exist **")
                 return
             for k, v in storage.all().items():
@@ -243,7 +256,7 @@ class HBNBCommand(cmd.Cmd):
         else:  # class name not present
             print("** class name missing **")
             return
-        if c_name not in HBNBCommand.classes:  # class name invalid
+        if c_name not in classes:  # class name invalid
             print("** class doesn't exist **")
             return
 
