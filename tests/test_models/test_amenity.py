@@ -1,8 +1,11 @@
 #!/usr/bin/python3
 """ """
 from tests.test_models.test_base_model import test_basemodel
+from models.engine.file_storage import FileStorage
+from models.engine.db_storage import DBStorage
 from models.amenity import Amenity
 import pep8
+import unittest
 
 
 class test_Amenity(test_basemodel):
@@ -25,3 +28,14 @@ class test_Amenity(test_basemodel):
         result = style.check_files(['models/amenity.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
+
+    @unittest.skipIf(type(FileStorage) is DBStorage,
+                     "Testing DBStorage")
+    def test_save_filestorage(self):
+        """Test save method with FileStorage."""
+        amenity = self.value()
+        old = amenity.updated_at
+        amenity.save()
+        self.assertLess(old, amenity.updated_at)
+        with open("file.json", "r") as f:
+            self.assertIn("Amenity." + amenity.id, f.read())
