@@ -45,5 +45,6 @@ class test_City(test_basemodel):
         with open("file.json", "r") as f:
             self.assertIn("City." + city.id, f.read())
 
+
 if __name__ == "__main__":
     unittest.main()

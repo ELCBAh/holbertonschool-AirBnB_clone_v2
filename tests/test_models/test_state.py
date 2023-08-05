@@ -40,5 +40,6 @@ class test_state(test_basemodel):
         with open("file.json", "r") as f:
             self.assertIn("State." + state.id, f.read())
 
+
 if __name__ == "__main__":
     unittest.main()

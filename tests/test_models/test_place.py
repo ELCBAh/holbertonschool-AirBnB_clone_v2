@@ -90,5 +90,6 @@ class test_Place(test_basemodel):
         with open("file.json", "r") as f:
             self.assertIn("Place." + place.id, f.read())
 
+
 if __name__ == "__main__":
     unittest.main()
