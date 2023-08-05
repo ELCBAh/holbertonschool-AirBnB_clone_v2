@@ -53,6 +53,18 @@ class test_fileStorage(unittest.TestCase):
         self.assertIs(obj, storage.all())
         self.assertEqual(len(obj), 0)
 
+    def test_methods(self):
+        """ Methods exist """
+        self.assertTrue(hasattr(storage, 'all'))
+        self.assertTrue(hasattr(storage, 'new'))
+        self.assertTrue(hasattr(storage, 'save'))
+        self.assertTrue(hasattr(storage, 'reload'))
+
+    def test_attributes(self):
+        """ attributes exist """
+        self.assertTrue(hasattr(storage, '__file_path'))
+        self.assertTrue(hasattr(storage, '__objects'))
+
     def test_reload(self):
         """ Storage file is successfully loaded to __objects """
         new = BaseModel()
