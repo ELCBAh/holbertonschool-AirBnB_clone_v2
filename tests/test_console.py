@@ -7,7 +7,7 @@ import os
 import models
 from console import HBNBCommand
 
-# TO DO: write console unittests
+
 class TestConsole(unittest.TestCase):
     """Console tests"""
     def tearDown(self):
@@ -20,11 +20,11 @@ class TestConsole(unittest.TestCase):
     def setUp(self):
         """Set up test"""
         self.console = HBNBCommand()
-    
+
     def test_quit(self):
         """Test quit"""
         self.assertEqual(self.console.onecmd("quit"), None)
-    
+
     def test_EOF(self):
         """Test EOF"""
         self.assertEqual(self.console.onecmd("EOF"), None)
