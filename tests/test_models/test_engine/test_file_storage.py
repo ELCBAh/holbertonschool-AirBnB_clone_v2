@@ -1,9 +1,18 @@
 #!/usr/bin/python3
 """ Module for testing file storage"""
 import unittest
+import pep8
+from datetime import datetime
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 from models.base_model import BaseModel
 from models import storage
 import os
+from models.engine.file_storage import FileStorage
 
 
 class test_fileStorage(unittest.TestCase):
