@@ -29,6 +29,10 @@ class test_state(test_basemodel):
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
+    def test_docstring(self):
+        """testing docstring"""
+        self.assertIsNotNone(State.__doc__)
+
     @unittest.skipIf(type(FileStorage) is DBStorage,
                      "Testing DBStorage")
     def test_save_filestorage(self):
