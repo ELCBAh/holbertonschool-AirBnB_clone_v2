@@ -6,6 +6,7 @@ import datetime
 from uuid import UUID
 import json
 import os
+import pep8
 
 
 class test_basemodel(unittest.TestCase):
@@ -97,6 +98,13 @@ class test_basemodel(unittest.TestCase):
         n = new.to_dict()
         new = BaseModel(**n)
         self.assertFalse(new.created_at == new.updated_at)
+    
+    def test_pep8_Amenity(self):
+        """pep8 test check"""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['models/base_model.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
 
 if __name__ == "__main__":

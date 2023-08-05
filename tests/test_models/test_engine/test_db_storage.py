@@ -46,8 +46,9 @@ class TestDBStorage(unittest.TestCase):
     def test_pep8(self):
         """pep8 test check"""
         style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/engine/db_storage.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+        result = style.check_files(['models/engine/db_storage.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
 
 if __name__ == "__main__":
