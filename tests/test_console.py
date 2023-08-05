@@ -8,6 +8,26 @@ import models
 from console import HBNBCommand
 
 # TO DO: write console unittests
+class TestConsole(unittest.TestCase):
+    """Console tests"""
+    def tearDown(self):
+        """Tear down test"""
+        try:
+            os.remove('file.json')
+        except FileNotFoundError:
+            pass
+
+    def setUp(self):
+        """Set up test"""
+        self.console = HBNBCommand()
+    
+    def test_quit(self):
+        """Test quit"""
+        self.assertEqual(self.console.onecmd("quit"), None)
+    
+    def test_EOF(self):
+        """Test EOF"""
+        self.assertEqual(self.console.onecmd("EOF"), None)
 
 
 if __name__ == "__main__":
