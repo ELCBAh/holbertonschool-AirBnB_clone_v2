@@ -126,6 +126,12 @@ class test_fileStorage(unittest.TestCase):
         self.assertIsNotNone(FileStorage.delete.__doc__)
         self.assertIsNotNone(FileStorage.reload.__doc__)
 
+    def test_pep8(self):
+        """pep8 test check"""
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(['models/engine/file_storage.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
+
 
 if __name__ == "__main__":
     unittest.main()
