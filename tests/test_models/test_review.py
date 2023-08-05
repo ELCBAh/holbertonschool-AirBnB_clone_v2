@@ -49,3 +49,6 @@ class test_review(test_basemodel):
         self.assertLess(old, review.updated_at)
         with open("file.json", "r") as f:
             self.assertIn("Review." + review.id, f.read())
+
+if __name__ == "__main__":
+    unittest.main()

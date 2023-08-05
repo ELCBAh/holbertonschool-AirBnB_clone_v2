@@ -89,3 +89,6 @@ class test_Place(test_basemodel):
         self.assertLess(old, place.updated_at)
         with open("file.json", "r") as f:
             self.assertIn("Place." + place.id, f.read())
+
+if __name__ == "__main__":
+    unittest.main()

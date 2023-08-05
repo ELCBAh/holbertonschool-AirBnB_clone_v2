@@ -106,6 +106,16 @@ class test_basemodel(unittest.TestCase):
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
+    @unittest.skipIf((os.getenv('HBNB_TYPE_STORAGE') != 'db'), "not db")
+    def test_save_db(self):
+        """ testing base model save to db"""
+        from models.engine.db_storage import DBStorage
+        storage = DBStorage()
+        storage.reload()
+        new = BaseModel()
+        new.save()
+        self.assertIn(new, storage.all().values())
+
 
 if __name__ == "__main__":
     unittest.main()
