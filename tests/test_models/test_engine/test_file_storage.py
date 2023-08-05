@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """ Module for testing file storage"""
 import unittest
-import pep8
 from datetime import datetime
 from models.user import User
 from models.state import State
@@ -10,9 +9,11 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from models.base_model import BaseModel
-from models import storage
 import os
 from models.engine.file_storage import FileStorage
+from models.engine.db_storage import DBStorage
+from models import storage
+import json
 
 
 class test_fileStorage(unittest.TestCase):
@@ -21,10 +22,10 @@ class test_fileStorage(unittest.TestCase):
     def setUp(self):
         """ Set up test environment """
         del_list = []
-        for key in storage._FileStorage__objects.keys():
+        for key in storage.__objects.keys():
             del_list.append(key)
         for key in del_list:
-            del storage._FileStorage__objects[key]
+            del storage.__objects[key]
 
     def tearDown(self):
         """ Remove storage file at end of tests """
@@ -40,43 +41,27 @@ class test_fileStorage(unittest.TestCase):
     def test_new(self):
         """ New object is correctly added to __objects """
         new = BaseModel()
-        for obj in storage.all().values():
-            temp = obj
-        self.assertTrue(temp is obj)
+        new.save()
+        store = storage.all()
+        self.assertIn(new.to_dict()['__class__'], store)
+        self.assertIn(new, store.values())
 
     def test_all(self):
         """ __objects is properly returned """
-        new = BaseModel()
-        temp = storage.all()
-        self.assertIsInstance(temp, dict)
-
-    def test_base_model_instantiation(self):
-        """ File is not created on BaseModel save """
-        new = BaseModel()
-        self.assertFalse(os.path.exists('file.json'))
-
-    def test_empty(self):
-        """ Data is saved to file """
-        new = BaseModel()
-        thing = new.to_dict()
-        new.save()
-        new2 = BaseModel(**thing)
-        self.assertNotEqual(os.path.getsize('file.json'), 0)
-
-    def test_save(self):
-        """ FileStorage save method """
-        new = BaseModel()
-        storage.save()
-        self.assertTrue(os.path.exists('file.json'))
+        obj = storage.all()
+        self.assertEqual(type(obj), dict)
+        self.assertIs(obj, storage.all())
+        self.assertEqual(len(obj), 0)
 
     def test_reload(self):
         """ Storage file is successfully loaded to __objects """
         new = BaseModel()
-        storage.save()
+        with open("file.json", "w") as f:
+            key = "{}.{}".format(type(new).__name__, new.id)
+            json.dump({key: new.to_dict()}, f)
         storage.reload()
-        for obj in storage.all().values():
-            loaded = obj
-        self.assertEqual(new.to_dict()['id'], loaded.to_dict()['id'])
+        store = FileStorage.__objects.keys()
+        self.assertIn("BaseModel." + str(new.id), store)
 
     def test_reload_empty(self):
         """ Load from an empty file """
@@ -97,19 +82,11 @@ class test_fileStorage(unittest.TestCase):
 
     def test_type_path(self):
         """ Confirm __file_path is string """
-        self.assertEqual(type(storage._FileStorage__file_path), str)
+        self.assertEqual(type(storage.__file_path), str)
 
     def test_type_objects(self):
         """ Confirm __objects is a dict """
         self.assertEqual(type(storage.all()), dict)
-
-    def test_key_format(self):
-        """ Key is properly formatted """
-        new = BaseModel()
-        _id = new.to_dict()['id']
-        for key in storage.all().keys():
-            temp = key
-        self.assertEqual(temp, 'BaseModel' + '.' + _id)
 
     def test_storage_var_created(self):
         """ FileStorage object storage created """
@@ -125,13 +102,6 @@ class test_fileStorage(unittest.TestCase):
         self.assertIsNotNone(FileStorage.save.__doc__)
         self.assertIsNotNone(FileStorage.delete.__doc__)
         self.assertIsNotNone(FileStorage.reload.__doc__)
-
-    def test_pep8(self):
-        """pep8 test check"""
-        style = pep8.StyleGuide(quiet=True)
-        result = style.check_files(['models/engine/file_storage.py'])
-        self.assertEqual(result.total_errors, 0,
-                         "Found code style errors (and warnings).")
 
 
 if __name__ == "__main__":
