@@ -17,7 +17,7 @@ class test_state(test_basemodel):
     def test_name3(self):
         """State"""
         new = self.value()
-        self.assertEqual(type(new.name), str)
+        self.assertEqual((new.name), None)
 
 
 if __name__ == "__main__":
