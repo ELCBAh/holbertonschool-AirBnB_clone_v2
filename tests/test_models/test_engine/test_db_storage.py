@@ -3,6 +3,7 @@
 import unittest
 from models.user import User
 from models.engine.db_storage import DBStorage
+import pep8
 
 
 class TestDBStorage(unittest.TestCase):
@@ -41,6 +42,12 @@ class TestDBStorage(unittest.TestCase):
         user.password = "XXXXXX"
         storage.new(user)
         self.assertIn(user, all_objs.values())
+
+    def test_pep8(self):
+        """pep8 test check"""
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(['models/engine/db_storage.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
 
 
 if __name__ == "__main__":
