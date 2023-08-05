@@ -103,6 +103,25 @@ class test_fileStorage(unittest.TestCase):
         self.assertIsNotNone(FileStorage.delete.__doc__)
         self.assertIsNotNone(FileStorage.reload.__doc__)
 
+    @classmethod
+    def setUpClass(cls):
+        """Set up class for testing"""
+        try:
+            os.rename("file.json", "tmp")
+        except FileNotFoundError:
+            pass
+
+    @classmethod
+    def tearDownClass(cls):
+        """Tear down class for testing"""
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except FileNotFoundError:
+            pass
 
 if __name__ == "__main__":
     unittest.main()
