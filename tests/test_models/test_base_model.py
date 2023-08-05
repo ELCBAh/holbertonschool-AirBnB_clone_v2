@@ -106,6 +106,10 @@ class test_basemodel(unittest.TestCase):
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
+    def test_docstring(self):
+        """testing docstring"""
+        self.assertIsNotNone(BaseModel.__doc__)
+
     @unittest.skipIf((os.getenv('HBNB_TYPE_STORAGE') != 'db'), "not db")
     def test_save_db(self):
         """ testing base model save to db"""
