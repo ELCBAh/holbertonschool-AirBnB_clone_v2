@@ -107,6 +107,15 @@ class test_fileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         print(type(storage))
         self.assertEqual(type(storage), FileStorage)
+    
+    def test_docstrings(self):
+        """docstrings test check"""
+        self.assertIsNotNone(FileStorage.__doc__)
+        self.assertIsNotNone(FileStorage.all.__doc__)
+        self.assertIsNotNone(FileStorage.new.__doc__)
+        self.assertIsNotNone(FileStorage.save.__doc__)
+        self.assertIsNotNone(FileStorage.delete.__doc__)
+        self.assertIsNotNone(FileStorage.reload.__doc__)
 
 
 if __name__ == "__main__":

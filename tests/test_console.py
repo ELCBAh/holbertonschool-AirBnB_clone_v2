@@ -4,7 +4,6 @@ Unittests for the console
 """
 import unittest
 import os
-import models
 from console import HBNBCommand
 
 
