@@ -9,26 +9,26 @@ import pep8
 
 
 class test_review(test_basemodel):
-    """ """
+    """Review"""
 
     def __init__(self, *args, **kwargs):
-        """ """
+        """Review"""
         super().__init__(*args, **kwargs)
         self.name = "Review"
         self.value = Review
 
     def test_place_id(self):
-        """ """
+        """Review"""
         new = self.value()
         self.assertEqual(type(new.place_id), str)
 
     def test_user_id(self):
-        """ """
+        """Review"""
         new = self.value()
         self.assertEqual(type(new.user_id), str)
 
     def test_text(self):
-        """ """
+        """Review"""
         new = self.value()
         self.assertEqual(type(new.text), str)
 
