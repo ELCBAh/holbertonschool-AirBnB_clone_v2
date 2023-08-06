@@ -33,11 +33,16 @@ class DBStorage:
     def all(self, cls=None):
         """Returns the dictionary of the current database session"""
 
-        if cls is not None:
-            return {obj.id: obj for obj in self.__session.query(cls).all()}
+        if cls is None:
+            query_obj = self.__session.query(State).all()
+            query_obj += self.__session.query(City).all()
+            query_obj += self.__session.query(User).all()
+            query_obj += self.__session.query(Amenity).all()
+            query_obj += self.__session.query(Place).all()
+            query_obj += self.__session.query(Review).all()
         else:
-            return {obj.id: obj for obj in self.__session.query(
-                classes[obj.__class__.__name__]).all()}
+            query_obj = self.__session.query(cls).all()
+        return {obj.id: obj for obj in query_obj}
 
     def new(self, obj):
         """Adds new object to current database session"""
