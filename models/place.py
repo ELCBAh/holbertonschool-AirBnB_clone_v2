@@ -33,30 +33,39 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
+    review = relationship("Review", backref="place",
+                            cascade="delete")
+    amenity = relationship("Amenity", secondary="place_amenity",
+                            viewonly=False)
 
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
-        reviewed = relationship("Review", backref="place",
-                                cascade="all, delete")
-        amenity = relationship("Amenity", secondary="place_amenity",
-                               viewonly=False)
-
-    else:
+    if getenv('HBNB_TYPE_STORAGE', None) != 'db':
+        @property
         def reviews(self):
             """ returns list of Review objects """
             from models import storage
             from models.review import Review
-            reviews = []
-            for review in storage.all(Review).values():
+            review_l = []
+            all_reviews = storage.all(Review)
+            for review in all_reviews.values():
                 if review.place_id == self.id:
-                    reviews.append(review)
-            return reviews
+                    review_l.append(review)
+            return review_l
 
+        @property
         def amenities(self):
             """ returns list of Amenity objects """
             from models import storage
             from models.amenity import Amenity
-            amenities = []
-            for amenity in storage.all(Amenity).values():
-                if amenity.id in self.amenity_ids:
-                    amenities.append(amenity)
-            return amenities
+            amenities_l = []
+            all_amenities = storage.all(Amenity)
+            for amenity in all_amenities.values():
+                if amenity.id == self.id:
+                    amenities_l.append(amenity)
+            return amenities_l
+        
+        @amenities.setter
+        def amenities(self, value):
+            """ sets amenity_ids to a list of Amenity ids """
+            from models.amenity import Amenity
+            if type(value) == Amenity:
+                self.amenity_ids.append(value.id)
