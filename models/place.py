@@ -47,7 +47,7 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     reviews.append(review)
             return reviews
-        
+
         def amenities(self):
             """ returns list of Amenity objects """
             from models import storage
